@@ -1,0 +1,65 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-tour_catalog}
+      POSTGRES_USER: ${DB_USERNAME:-tour}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./apps/backend:/var/www/html
+    environment:
+      - APP_ENV=local
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=tour_catalog
+      - DB_USERNAME=tour
+      - DB_PASSWORD=secret
+      - REDIS_HOST=redis
+      - EMBEDDINGS_URL=http://embeddings:8001
+    depends_on:
+      - db
+      - redis
+      - embeddings
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./apps/frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL_SSR=http://backend:8000
+    ports:
+      - "5173:5173"
+
+  embeddings:
+    build:
+      context: ./services/embeddings
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+
+volumes:
+  pgdata:

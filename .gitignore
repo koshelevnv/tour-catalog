@@ -1,0 +1,28 @@
+# Laravel
+apps/backend/vendor/
+apps/backend/.env
+apps/backend/storage/logs/*.log
+apps/backend/storage/framework/cache/
+apps/backend/storage/framework/sessions/
+apps/backend/storage/framework/views/
+apps/backend/bootstrap/cache/
+apps/backend/public/storage
+
+# Node
+apps/frontend/node_modules/
+apps/frontend/dist/
+apps/frontend/.env
+apps/frontend/.env.local
+
+# Python
+services/embeddings/__pycache__/
+services/embeddings/*.pyc
+services/embeddings/.venv/
+
+# Docker volumes / OS
+.DS_Store
+Thumbs.db
+
+# Auto-commit script output (script itself tracked, logs — нет)
+autocommit.log
+.claude/settings.json
