@@ -26,3 +26,10 @@ Thumbs.db
 # Auto-commit script output (script itself tracked, logs — нет)
 autocommit.log
 .claude/settings.json
+# Служебные файлы Claude Code
+CLAUDE.md
+GUIDE.md
+PLAN.md
+STATUS.md
+autocommit.ps1
+task.md
